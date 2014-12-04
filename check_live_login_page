@@ -1,5 +1,5 @@
 #!/bin/bash
-r=`curl https://openeyes.moorfields.nhs.uk/site/login 2>/dev/null |grep '<title>OpenEyes - Login</title>'`
+r=`curl -k https://openeyes.moorfields.nhs.uk/site/login 2>/dev/null |grep '<title>OpenEyes - Login</title>'`
 if [ "$r" == "" ] ; then
 	echo "BAD: Couldn't load the login page"
 	exit 2
