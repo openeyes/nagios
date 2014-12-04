@@ -8,7 +8,7 @@ if [ "$r" == "" ] ; then
 	echo "BAD: $1 not mounted"
 	exit 2
 fi
-r=`ls -la "$1" / 2>/dev/null`
+r=`ls -la "$1" 2>/dev/null`
 if [ "$r" == "" ] ; then
 	echo "BAD: $1 mount unavailable"
 	exit 2
