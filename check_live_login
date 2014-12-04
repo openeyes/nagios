@@ -1,0 +1,28 @@
+#!/usr/bin/php -q
+<?php
+require_once(dirname(__FILE__)."/curl.php");
+
+$c = new Curl;
+$html = $c->get('https://openeyes.moorfields.nhs.uk');
+
+if (!preg_match('/<input type="hidden" value="([0-9a-f]+)" name="YII_CSRF_TOKEN"/',$html,$m)) {
+	echo "BAD: Unable to find CSRF token on login page.\n";
+	die(2);
+}
+
+$html = $c->post('https://openeyes.moorfields.nhs.uk/site/login',array(
+	'YII_CSRF_TOKEN' => $m[1],
+	'LoginForm[username]' => 'admin',
+	'LoginForm[password]' => trim(file_get_contents("/etc/nagios/.admin")),
+));
+
+if (!preg_match('/<title>OpenEyes - Site<\/title>/',$html)) {
+	echo "BAD: Login failed\n";
+	die(2);
+}
+
+$c->get('http://glaucoma21/site/logout');
+
+echo "OK: Login worked\n";
+die(0);
+?>
