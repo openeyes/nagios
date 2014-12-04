@@ -1,4 +1,4 @@
-#!/use/bin/php -q
+#!/usr/bin/php -q
 <?php
 chdir("/opt/blackbox");
 
