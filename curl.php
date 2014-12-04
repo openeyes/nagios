@@ -7,6 +7,7 @@ class Curl {
 		curl_setopt($this->curl, CURLOPT_FOLLOWLOCATION, true);
 		curl_setopt($this->curl, CURLOPT_USERAGENT, "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3");
 		curl_setopt($this->curl, CURLOPT_TIMEOUT, 120);
+		curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($this->curl, CURLOPT_COOKIEFILE, "/tmp/X".time());
 	}
 
