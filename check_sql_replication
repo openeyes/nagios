@@ -3,7 +3,7 @@
 $res = trim(`diff /etc/mysql/my.cnf /etc/mysql/my.cnf.slave`);
 
 if (!$res) {
-	$db = mysql_connect("localhost","root",file_get_contents("/etc/nagios/.mysql"));
+	$db = mysql_connect("localhost","root",trim(file_get_contents("/etc/nagios/.mysql")));
 	$res = mysql_query("show slave status");
 	$row = mysql_fetch_object($res);
 
