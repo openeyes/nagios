@@ -1,0 +1,19 @@
+#!/bin/bash
+r=`/sbin/ifconfig |grep 'inet addr:130.1.27.85'`
+if [ ! "$r" == "" ] ; then
+	dir="/var/www/openeyes/protected/files"
+	r=`mount |grep "$dir"`
+	if [ "$r" == "" ] ; then
+		echo "BAD: $dir not mounted"
+		exit 2
+	fi
+	r=`ls -la /mehbackup/ 2>/dev/null`
+	if [ "$r" == "" ] ; then
+		echo "BAD: $dir mount unavailable"
+		exit 2
+	fi
+	echo "OK: $dir mounted and available"
+	exit 0
+fi
+echo "OK: not live server"
+exit 0
