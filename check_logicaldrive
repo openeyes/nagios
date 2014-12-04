@@ -1,0 +1,13 @@
+#!/bin/bash
+if [ "$1" == "" ] ; then
+	echo "Usage: check_logicaldrive <drive>"
+	exit 0
+fi
+r=`cat /etc/nagios/raid |grep "logicaldrive $1" |sed 's/.*(//' |sed 's/)$//'`
+x=`echo "$r" |egrep ', OK$'`
+echo "$r"
+if [ "$x" == "" ] ; then
+	exit 2
+else
+	exit 0
+fi

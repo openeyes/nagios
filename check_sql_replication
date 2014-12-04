@@ -1,0 +1,34 @@
+#!/usr/bin/php -q
+<?php
+$res = trim(`diff /etc/mysql/my.cnf /etc/mysql/my.cnf.slave`);
+
+if (!$res) {
+	$db = mysql_connect("localhost","root",file_get_contents("/etc/nagios/.mysql"));
+	$res = mysql_query("show slave status");
+	$row = mysql_fetch_object($res);
+
+	$warning = 30;
+	$critical = 120;
+
+	if ($row->Slave_IO_Running != 'Yes') {
+		echo "BAD: Slave IO not running\n";
+		die(2);
+	}
+	if ($row->Slave_SQL_Running != 'Yes') {
+		echo "BAD: Slave SQL not running\n";
+		die(2);
+	}
+	if ($row->Seconds_Behind_Master >= $warning) {
+		echo "WARNING: $row->Seconds_Behind_Master seconds behind master\n";
+		die(1);
+	}
+	if ($row->Seconds_Behind_Master >= $critical) {
+		echo "CRITICAL: $row->Seconds_Behind_Master seconds behind master\n";
+		die(2);
+	}
+	echo "OK\n";
+} else {
+	echo "OK (not configured as as slave)\n";
+}
+die(0);
+?>

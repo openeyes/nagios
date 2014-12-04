@@ -1,0 +1,17 @@
+#!/bin/bash
+if [ "$1" == "" ] ; then
+	echo "check_share_mounted <mountedpoint>"
+	exit 2
+fi
+r=`mount |grep "$1"`
+if [ "$r" == "" ] ; then
+	echo "BAD: $1 not mounted"
+	exit 2
+fi
+r=`ls -la /mehbackup/ 2>/dev/null`
+if [ "$r" == "" ] ; then
+	echo "BAD: $1 mount unavailable"
+	exit 2
+fi
+echo "OK: $1 mounted and available"
+exit 0

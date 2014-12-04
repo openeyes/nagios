@@ -1,0 +1,13 @@
+#!/bin/bash
+pid=`cat /opt/nearlive_blackbox/nl.pid`
+if [ "$pid" == "" ] ; then
+	echo "BAD: Not running (no pid)"
+	exit 2
+fi
+r=`ps -p $pid |xargs -L1 |egrep -v '^PID TTY'`
+if [ "$r" == "" ] ; then
+	echo "BAD: Not running"
+	exit 2
+fi
+echo "OK: running as pid $pid"
+exit 0
