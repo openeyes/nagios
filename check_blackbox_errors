@@ -1,0 +1,21 @@
+#!/use/bin/php -q
+<?php
+chdir("/opt/blackbox");
+
+$count = 0;
+foreach (explode(chr(10),trim(`cat blackbox.log |grep 'WARNING: Could not rename' |cut -d ' ' -f5 |sort -u`)) as $file) {
+	if (file_exists($file)) {
+		$count++;
+	}
+}
+
+if ($count >= 100) {
+	echo "CRITICAL: $count stuck in incoming/\n";
+	exit(2);
+}
+if ($count >= 50) {
+	echo "WARNING: $count stuck in incoming/\n";
+	exit(1);
+}
+echo "OK: $count in incoming/\n";
+exit(0);
