@@ -1,7 +1,19 @@
 #!/bin/bash
-lockfile="/root/backup_rsync.lock"
-trap "[ -f $lockfile ] && /bin/rm -f $lockfile" 2 3 13 15
-lockfile -r 0 $lockfile || exit 1
+mutex() {
+	local file=$1 pid pids 
+
+	exec 9>>"$file"
+	{ pids=$(fuser -f "$file"); } 2>&- 9>&- 
+	for pid in $pids; do
+		[[ $pid = $$ ]] && continue
+
+		exec 9>&- 
+		return 1 # Locked by a pid.
+	done 
+}
+
+mutex /root/backup_rsync.lock || { echo "Already running."; exit 1; }
+
 hostname=`hostname`
 rsync -aPr /backup/$hostname/ /mehbackup/$hostname/ 1>/dev/null 2>/root/backup_rsync.output
 r=`cat /root/backup_rsync.output`
