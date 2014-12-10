@@ -14,6 +14,11 @@ mutex() {
 
 mutex /root/backup_rsync.lock || { echo "Already running."; exit 1; }
 
+# Make sure backup isn't running
+flock -x -n /tmp/.oebackup.lock touch /tmp/.oebackup.lock || { echo "Backup running."; exit 1; }
+
+echo "$BASHPID" > /root/backup_rsync.pid
+
 hostname=`hostname`
 rsync -aPr /backup/$hostname/ /mehbackup/$hostname/ 1>/dev/null 2>/root/backup_rsync.output
 r=`cat /root/backup_rsync.output`
@@ -23,3 +28,5 @@ if [ ! "$r" == "" ] ; then
 else
 	echo 1 > /etc/nagios/backup.status
 fi
+
+rm -f /root/backup_rsync.pid
