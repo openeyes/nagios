@@ -7,7 +7,7 @@ if [ ! "$r" == "" ] ; then
 		echo "BAD: $dir not mounted"
 		exit 2
 	fi
-	r=`ls -la /mehbackup/ 2>/dev/null`
+	r=`ls -la "$dir" 2>/dev/null`
 	if [ "$r" == "" ] ; then
 		echo "BAD: $dir mount unavailable"
 		exit 2
