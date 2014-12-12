@@ -1,5 +1,5 @@
 #!/bin/bash
-pid=`cat /opt/nearlive_blackbox/nl.pid`
+pid=`cat /opt/blackbox/blackbox.pid`
 if [ "$pid" == "" ] ; then
 	echo "BAD: Not running (no pid)"
 	exit 2
