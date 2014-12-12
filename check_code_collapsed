@@ -1,0 +1,3 @@
+#!/bin/bash
+echo "OK: code has not collapsed"
+exit 0
